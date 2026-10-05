@@ -1,81 +1,138 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#111827">
-  <meta name="description" content="Personal task tracker">
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="src/styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Local-first personal task tracker" />
   <title>Task Tracker</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="app-header">
-    <div>
-      <h1>Tasks</h1>
-      <div id="sync-status" class="sync-status">Local only</div>
+  <header class="app-header container-fluid">
+    <div class="brand-block">
+      <h1>Task Tracker</h1>
+      <span class="muted small">Local-first · no backend</span>
     </div>
-    <button id="new-task-btn" class="primary">+ New Task</button>
+
+    <div class="header-actions">
+      <label class="profile-picker">
+        <span>Profile</span>
+        <select id="profileSelect" aria-label="Current profile"></select>
+      </label>
+      <button id="newTaskBtn" class="contrast">+ New Task</button>
+    </div>
   </header>
 
-  <nav class="tabs" aria-label="Views">
-    <button class="tab active" data-view="current">Current</button>
-    <button class="tab" data-view="recent">Recent</button>
-    <button class="tab" data-view="history">History</button>
-    <button class="tab" data-view="settings">Settings</button>
+  <nav class="view-tabs container-fluid" aria-label="Primary">
+    <button class="tab-button active" data-view="active">Active</button>
+    <button class="tab-button" data-view="summary">Summary</button>
+    <button class="tab-button" data-view="all">All Tasks</button>
+    <button class="tab-button" data-view="settings">Data</button>
   </nav>
 
-  <main id="app"></main>
+  <main class="container-fluid app-main">
+    <section id="activeView" class="view-panel"></section>
+    <section id="summaryView" class="view-panel hidden"></section>
+    <section id="allView" class="view-panel hidden"></section>
+    <section id="settingsView" class="view-panel hidden"></section>
+  </main>
 
-  <dialog id="task-dialog">
-    <form id="task-form" method="dialog">
-      <div class="dialog-header">
-        <h2 id="dialog-title">New Task</h2>
-        <button type="button" id="close-dialog" class="icon-btn" aria-label="Close">×</button>
-      </div>
-      <input type="hidden" id="task-id">
-      <label>Description
-        <input id="description" required maxlength="200" autocomplete="off">
-      </label>
-      <div class="form-grid">
-        <label>Status
-          <select id="status">
-            <option>Priority</option>
-            <option>Next Up</option>
-            <option>Waiting On</option>
-            <option>Recurring</option>
-            <option>Completed</option>
-            <option>Scrapped</option>
-          </select>
+  <dialog id="taskDialog">
+    <article>
+      <header class="dialog-header">
+        <div>
+          <h2 id="taskDialogTitle">Task</h2>
+          <p id="taskMeta" class="muted small"></p>
+        </div>
+        <button aria-label="Close" rel="prev" id="closeTaskDialog"></button>
+      </header>
+
+      <form id="taskForm">
+        <input id="taskId" type="hidden" />
+
+        <label>
+          Description
+          <textarea id="description" rows="3" required placeholder="What needs to be done?"></textarea>
         </label>
-        <label>Category
-          <input id="category" maxlength="60" placeholder="Work">
+
+        <div class="form-grid two">
+          <label>
+            Status
+            <select id="status" required></select>
+          </label>
+          <label>
+            Profile
+            <select id="taskProfile" required></select>
+          </label>
+        </div>
+
+        <div class="form-grid two">
+          <label>
+            Category
+            <input id="category" type="text" placeholder="e.g. Reporting" />
+          </label>
+          <label>
+            Subcategory
+            <input id="subcategory" type="text" placeholder="e.g. Power BI" />
+          </label>
+        </div>
+
+        <label>
+          Tags <span class="muted small">(comma separated)</span>
+          <input id="tags" type="text" placeholder="dashboard, follow-up, admin" />
         </label>
-        <label>Subcategory
-          <input id="subcategory" maxlength="60" placeholder="Fabric">
+
+        <div class="form-grid two">
+          <label>
+            Date added
+            <input id="dateAdded" type="datetime-local" />
+          </label>
+          <label>
+            Date completed
+            <input id="dateCompleted" type="datetime-local" />
+          </label>
+        </div>
+
+        <label>
+          Notes
+          <textarea id="notes" rows="7" placeholder="Progress, decisions, links, completion notes..."></textarea>
         </label>
-        <label>Due date
-          <input id="due-date" type="date">
-        </label>
-        <label>Waiting on
-          <input id="waiting-on" maxlength="100">
-        </label>
-        <label>Parent task
-          <input id="parent-task" inputmode="numeric" placeholder="Optional ID">
-        </label>
-      </div>
-      <label>Notes
-        <textarea id="notes" rows="5" placeholder="Context, outcome, links, etc."></textarea>
-      </label>
-      <div class="form-actions">
-        <button type="button" id="delete-task-btn" class="danger hidden">Delete</button>
-        <span></span>
-        <button type="button" id="cancel-btn" class="secondary">Cancel</button>
-        <button type="submit" class="primary">Save</button>
-      </div>
-    </form>
+
+        <div class="dialog-actions">
+          <button type="button" id="duplicateTaskBtn" class="secondary">Duplicate</button>
+          <span class="spacer"></span>
+          <button type="button" id="deleteTaskBtn" class="outline secondary">Delete</button>
+          <button type="submit">Save</button>
+        </div>
+      </form>
+    </article>
   </dialog>
 
-  <script type="module" src="src/app.js"></script>
+  <dialog id="profileDialog">
+    <article>
+      <header class="dialog-header">
+        <h2>Profiles</h2>
+        <button aria-label="Close" rel="prev" id="closeProfileDialog"></button>
+      </header>
+      <div id="profileList"></div>
+      <form id="addProfileForm" class="inline-form">
+        <input id="newProfileName" type="text" placeholder="New profile name" required />
+        <button type="submit">Add</button>
+      </form>
+    </article>
+  </dialog>
+
+  <input id="importFile" type="file" accept="application/json,.json" hidden />
+
+  <template id="emptyStateTemplate">
+    <div class="empty-state">
+      <h3>Nothing here yet</h3>
+      <p class="muted"></p>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
 </body>
 </html>

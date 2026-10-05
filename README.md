@@ -1,47 +1,87 @@
-# Personal Task Tracker
+# Local Task Tracker
 
-A small mobile-first, local-first task tracker designed for GitHub Pages.
+A lightweight, local-first task tracker designed for GitHub Pages. There is no backend, no build process, and no account system. Your data stays in the browser's `localStorage` until you export it.
 
-## Architecture
+## Features
 
-- Static HTML/CSS/JavaScript
-- IndexedDB for local task and event storage
-- Optional JSON import/export
-- Optional GitHub Contents API sync
-- PWA service worker for basic offline use
+- Profile-first workflow: view one profile at a time (Work, Personal, etc.)
+- Active task board grouped in this order:
+  1. Priority
+  2. Next Up
+  3. Waiting On
+  4. Reocurring
+- Completion summaries for the last day, week, month, quarter, or year
+- One-click copyable accomplishment summary
+- Full task detail editor
+- Task fields:
+  - ID
+  - Description
+  - Date added
+  - Date completed
+  - Notes
+  - Status
+  - Profile
+  - Category
+  - Subcategory
+  - Tags
+- Searchable "All Tasks" table
+- Soft-delete workflow plus optional permanent delete
+- JSON export/import for backups and moving between devices
+- Dark mode
+- Desktop and mobile layouts
+- Pico CSS via CDN
+- No build step
 
-## GitHub Pages
+## Run locally
+
+You can simply open `index.html`, but browser security rules are friendlier if you serve the folder locally.
+
+With Python:
+
+```bash
+python -m http.server 8000
+```
+
+Then open `http://localhost:8000`.
+
+## Deploy to GitHub Pages
 
 1. Create a GitHub repository.
-2. Copy these files into it.
-3. Enable GitHub Pages from the repository's Pages settings.
-4. Open the published site.
+2. Copy these files into the repository root.
+3. Commit and push.
+4. In GitHub, open **Settings → Pages**.
+5. Under **Build and deployment**, select **Deploy from a branch**.
+6. Choose your main branch and `/ (root)`.
+7. Save.
 
-## GitHub sync
+GitHub will publish the site at the Pages URL shown in that settings screen.
 
-The first version uses a personal fine-grained GitHub token entered by the user in Settings.
+## Storage behavior
 
-Recommended repository permissions:
-- Repository access: only the task-tracker repository
-- Contents: Read and write
+The app stores data in the browser using these localStorage keys:
 
-The token is stored only in that browser's localStorage and is never written into the JSON file.
+- `local-task-tracker-v1`
+- `local-task-tracker-profile-v1`
 
-For stronger security, a future version should replace the personal token approach with a backend/OAuth flow.
+This means:
 
-## Data model
+- different browsers/devices have separate task data;
+- clearing site data will erase tasks from that browser;
+- GitHub itself never receives your task content;
+- you should export JSON backups periodically if the data matters.
 
-Tasks contain the current state. Task events preserve lifecycle history.
+## Backup format
 
-A GitHub backup looks roughly like:
+Exports are human-readable JSON and include all profiles and tasks. Importing a backup replaces the current browser dataset after confirmation.
 
-{
-  "version": 1,
-  "exportedAt": "...",
-  "tasks": [...],
-  "events": [...]
-}
+## Suggested next iteration
 
-## Important limitation
+Good follow-on additions would be:
 
-GitHub sync currently treats the GitHub JSON file as the shared source when you explicitly Pull or Push. It does not yet perform automatic conflict detection or merging between devices.
+- manual drag/drop ordering within each active status;
+- recurring-task rules that create the next instance automatically;
+- richer summary export (Markdown / CSV);
+- optional due date and "waiting on" person fields;
+- installable PWA/offline mode;
+- configurable custom statuses or categories;
+- profile-specific default categories and tags.
