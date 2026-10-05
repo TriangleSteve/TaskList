@@ -45,7 +45,8 @@
     dateCompleted: document.querySelector('#dateCompleted'),
     notes: document.querySelector('#notes'),
     duplicateTaskBtn: document.querySelector('#duplicateTaskBtn'),
-    deleteTaskBtn: document.querySelector('#deleteTaskBtn'),
+    completeTaskBtn: document.querySelector('#completeTaskBtn'),
+    advancedFields: document.querySelector('.advanced-fields'),
     profileDialog: document.querySelector('#profileDialog'),
     closeProfileDialog: document.querySelector('#closeProfileDialog'),
     profileList: document.querySelector('#profileList'),
@@ -157,7 +158,7 @@
     });
 
     els.taskForm.addEventListener('submit', saveTaskFromForm);
-    els.deleteTaskBtn.addEventListener('click', deleteOrTrashTask);
+    els.completeTaskBtn.addEventListener('click', completeTask);
     els.duplicateTaskBtn.addEventListener('click', duplicateTask);
     els.status.addEventListener('change', syncCompletedDate);
 
@@ -512,7 +513,8 @@
     els.dateCompleted.value = data.dateCompleted ? toLocalInputValue(data.dateCompleted) : '';
     els.notes.value = data.notes;
     els.duplicateTaskBtn.hidden = isNew;
-    els.deleteTaskBtn.hidden = isNew;
+    els.completeTaskBtn.hidden = isNew;
+    els.advancedFields.open = false;
     els.taskDialog.showModal();
     setTimeout(() => els.description.focus(), 20);
   }
@@ -563,19 +565,19 @@
     }
   }
 
-  function deleteOrTrashTask() {
+  function completeTask() {
     const task = state.data.tasks.find(t => t.id === els.taskId.value);
     if (!task) return;
 
-    if (task.status !== 'Deleted') {
-      if (!confirm('Move this task to Deleted?')) return;
-      task.status = 'Deleted';
-      task.order = nextOrderFor('Deleted', task.profile);
-      task.updatedAt = new Date().toISOString();
-    } else {
-      if (!confirm('Permanently delete this task? This cannot be undone unless you restore from an exported JSON backup.')) return;
-      state.data.tasks = state.data.tasks.filter(t => t.id !== task.id);
-    }
+    const now = new Date().toISOString();
+    task.description = els.description.value.trim();
+    task.notes = els.notes.value.trim();
+    task.tags = parseTags(els.tags.value);
+    task.dateAdded = fromLocalInputValue(els.dateAdded.value) || task.dateAdded || now;
+    task.status = 'Completed';
+    task.dateCompleted = now;
+    task.order = nextOrderFor('Completed', task.profile);
+    task.updatedAt = now;
 
     saveData();
     els.taskDialog.close();

@@ -570,3 +570,66 @@ body { margin: 0; background: #0d1117; }
   .dialog-top-actions { gap: .3rem; }
   .task-action { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
 }
+
+
+/* v1.3.1 focused layout/action refinements */
+@media (min-width: 761px) {
+  .header-inner {
+    min-height: 74px;
+    padding-top: .85rem;
+    padding-bottom: .85rem;
+    align-items: center;
+  }
+  .profile-picker {
+    height: 42px;
+    margin: 0 !important;
+    padding: 0;
+    align-self: center;
+    display: flex;
+    align-items: center;
+  }
+  .profile-picker select {
+    height: 42px;
+    min-height: 42px;
+    margin: 0 !important;
+    align-self: center;
+  }
+  .new-task-button {
+    height: 42px;
+    min-height: 42px;
+    margin: 0 !important;
+    align-self: center;
+  }
+}
+
+.task-dialog-header {
+  margin-bottom: .8rem;
+}
+.dialog-bottom-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: .55rem;
+  margin-top: 1rem;
+  padding-top: .9rem;
+  border-top: 1px solid var(--pico-muted-border-color);
+}
+.dialog-bottom-actions .task-action {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  min-height: 48px;
+}
+
+@media (max-width: 760px) {
+  .dialog-bottom-actions {
+    justify-content: space-between;
+    gap: .45rem;
+  }
+  .dialog-bottom-actions .task-action {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    min-height: 52px;
+  }
+}

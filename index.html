@@ -7,7 +7,7 @@
   <title>Tasks</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
-  <link rel="stylesheet" href="styles.css?v=1.3.0" />
+  <link rel="stylesheet" href="styles.css?v=1.3.1" />
 </head>
 <body>
   <header class="app-header">
@@ -52,20 +52,6 @@
     <article>
       <header class="dialog-header task-dialog-header">
         <h2 id="taskDialogTitle">Details</h2>
-        <div class="dialog-top-actions" aria-label="Task actions">
-          <button type="button" id="duplicateTaskBtn" class="task-action secondary outline" aria-label="Duplicate task" title="Duplicate">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="10" height="10" rx="2"/><rect x="5" y="5" width="10" height="10" rx="2"/></svg>
-          </button>
-          <button type="button" id="deleteTaskBtn" class="task-action secondary outline" aria-label="Delete task" title="Delete">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M8 10v7M12 10v7M16 10v7M6 7l1 13h10l1-13"/></svg>
-          </button>
-          <button type="button" id="closeTaskDialog" class="task-action secondary outline" aria-label="Discard changes" title="Discard">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
-          </button>
-          <button type="submit" form="taskForm" id="topSaveTaskBtn" class="task-action" aria-label="Save task" title="Save">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg>
-          </button>
-        </div>
       </header>
 
       <form id="taskForm">
@@ -105,6 +91,20 @@
           </div>
         </details>
 
+        <div class="dialog-bottom-actions" aria-label="Task actions">
+          <button type="button" id="duplicateTaskBtn" class="task-action secondary outline" aria-label="Duplicate task" title="Duplicate">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="10" height="10" rx="2"/><rect x="5" y="5" width="10" height="10" rx="2"/></svg>
+          </button>
+          <button type="button" id="completeTaskBtn" class="task-action secondary outline" aria-label="Mark task complete" title="Complete">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg>
+          </button>
+          <button type="button" id="closeTaskDialog" class="task-action secondary outline" aria-label="Discard changes" title="Discard">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+          <button type="submit" id="saveTaskBtn" class="task-action" aria-label="Save task" title="Save">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h12l2 2v14H5z"/><path d="M8 4v6h8V4M8 20v-6h8v6"/></svg>
+          </button>
+        </div>
       </form>
     </article>
   </dialog>
@@ -126,6 +126,6 @@
   <input id="importFile" type="file" accept="application/json,.json" hidden />
 
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
-  <script src="app.js?v=1.3.0"></script>
+  <script src="app.js?v=1.3.1"></script>
 </body>
 </html>
