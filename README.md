@@ -27,7 +27,6 @@ A lightweight, local-first task tracker designed for GitHub Pages. There is no b
 - Searchable "All Tasks" table
 - Soft-delete workflow plus optional permanent delete
 - JSON export/import for backups and moving between devices
-- Dark mode
 - Desktop and mobile layouts
 - Pico CSS via CDN
 - No build step
@@ -49,7 +48,7 @@ Then open `http://localhost:8000`.
 1. Create a GitHub repository.
 2. Copy these files into the repository root.
 3. Commit and push.
-4. In GitHub, open **Settings → Pages**.
+4. In GitHub, open **Settings -> Pages**.
 5. Under **Build and deployment**, select **Deploy from a branch**.
 6. Choose your main branch and `/ (root)`.
 7. Save.
