@@ -4,35 +4,44 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Local-first personal task tracker" />
-  <title>Task Tracker</title>
+  <title>Tasks</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=1.1.0" />
 </head>
 <body>
-  <header class="app-header container-fluid">
-    <div class="brand-block">
-      <h1>Task Tracker</h1>
-      <span class="muted small">Local-first · no backend</span>
-    </div>
+  <header class="app-header">
+    <div class="header-inner">
+      <button id="menuBtn" class="icon-button menu-button" aria-label="Open navigation" aria-expanded="false" aria-controls="appNav">
+        <span></span><span></span><span></span>
+      </button>
 
-    <div class="header-actions">
+      <h1>Tasks</h1>
+
       <label class="profile-picker">
-        <span>Profile</span>
+        <span class="sr-only">Profile</span>
         <select id="profileSelect" aria-label="Current profile"></select>
       </label>
-      <button id="newTaskBtn" class="contrast">+ New Task</button>
+
+      <button id="newTaskBtn" class="contrast new-task-button"><span class="desktop-new-label">+ New Task</span><span class="mobile-new-label">+</span></button>
     </div>
   </header>
 
-  <nav class="view-tabs container-fluid" aria-label="Primary">
-    <button class="tab-button active" data-view="active">Active</button>
-    <button class="tab-button" data-view="summary">Summary</button>
-    <button class="tab-button" data-view="all">All Tasks</button>
-    <button class="tab-button" data-view="settings">Data</button>
-  </nav>
+  <div id="navBackdrop" class="nav-backdrop hidden" aria-hidden="true"></div>
+  <aside id="appNav" class="app-nav" aria-label="Primary navigation">
+    <div class="nav-header">
+      <strong>Navigation</strong>
+      <button id="closeNavBtn" class="icon-button close-nav" aria-label="Close navigation">×</button>
+    </div>
+    <nav class="nav-links">
+      <button class="tab-button active" data-view="active"><span>Active</span></button>
+      <button class="tab-button" data-view="summary"><span>Summary</span></button>
+      <button class="tab-button" data-view="all"><span>All Tasks</span></button>
+      <button class="tab-button" data-view="settings"><span>Data & Profiles</span></button>
+    </nav>
+  </aside>
 
-  <main class="container-fluid app-main">
+  <main class="app-main">
     <section id="activeView" class="view-panel"></section>
     <section id="summaryView" class="view-panel hidden"></section>
     <section id="allView" class="view-panel hidden"></section>
@@ -57,48 +66,34 @@
           <textarea id="description" rows="3" required placeholder="What needs to be done?"></textarea>
         </label>
 
-        <div class="form-grid two">
-          <label>
-            Status
-            <select id="status" required></select>
-          </label>
-          <label>
-            Profile
-            <select id="taskProfile" required></select>
-          </label>
-        </div>
-
-        <div class="form-grid two">
-          <label>
-            Category
-            <input id="category" type="text" placeholder="e.g. Reporting" />
-          </label>
-          <label>
-            Subcategory
-            <input id="subcategory" type="text" placeholder="e.g. Power BI" />
-          </label>
-        </div>
+        <label>
+          Status
+          <select id="status" required></select>
+        </label>
 
         <label>
           Tags <span class="muted small">(comma separated)</span>
           <input id="tags" type="text" placeholder="dashboard, follow-up, admin" />
         </label>
 
-        <div class="form-grid two">
-          <label>
-            Date added
-            <input id="dateAdded" type="datetime-local" />
-          </label>
-          <label>
-            Date completed
-            <input id="dateCompleted" type="datetime-local" />
-          </label>
-        </div>
-
         <label>
           Notes
           <textarea id="notes" rows="7" placeholder="Progress, decisions, links, completion notes..."></textarea>
         </label>
+
+        <details class="advanced-fields">
+          <summary>Advanced fields</summary>
+          <div class="form-grid two advanced-grid">
+            <label>
+              Date added
+              <input id="dateAdded" type="datetime-local" />
+            </label>
+            <label>
+              Date completed
+              <input id="dateCompleted" type="datetime-local" />
+            </label>
+          </div>
+        </details>
 
         <div class="dialog-actions">
           <button type="button" id="duplicateTaskBtn" class="secondary">Duplicate</button>
@@ -126,13 +121,7 @@
 
   <input id="importFile" type="file" accept="application/json,.json" hidden />
 
-  <template id="emptyStateTemplate">
-    <div class="empty-state">
-      <h3>Nothing here yet</h3>
-      <p class="muted"></p>
-    </div>
-  </template>
-
-  <script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
+  <script src="app.js?v=1.1.0"></script>
 </body>
 </html>
