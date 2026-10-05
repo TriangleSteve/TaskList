@@ -3,6 +3,7 @@
 
   const STORAGE_KEY = 'local-task-tracker-v1';
   const PROFILE_KEY = 'local-task-tracker-profile-v1';
+  const PROFILE_ICONS = ['💼', '🏠', '👤', '⭐', '❤️', '📚', '🎓', '💪', '🛒', '💰', '🛠️', '💡', '📅', '🎯', '🚗', '✈️'];
   const STATUSES = ['Priority', 'Next Up', 'Waiting On', 'Reocurring', 'Completed', 'Deleted'];
   const ACTIVE_STATUSES = ['Priority', 'Next Up', 'Waiting On', 'Reocurring'];
   const SUMMARY_WINDOWS = {
@@ -52,6 +53,7 @@
     profileList: document.querySelector('#profileList'),
     addProfileForm: document.querySelector('#addProfileForm'),
     newProfileName: document.querySelector('#newProfileName'),
+    newProfileIcon: document.querySelector('#newProfileIcon'),
     importFile: document.querySelector('#importFile')
   };
 
@@ -65,28 +67,48 @@
     render();
   }
 
+  function defaultData() {
+    return {
+      version: 3,
+      profiles: [
+        { name: 'Work', icon: '💼' },
+        { name: 'Personal', icon: '🏠' }
+      ],
+      tasks: []
+    };
+  }
+
   function loadData() {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { version: 2, profiles: ['Work', 'Personal'], tasks: [] };
+    if (!raw) return defaultData();
 
     try {
       const parsed = JSON.parse(raw);
-      return parsed && typeof parsed === 'object' ? parsed : { version: 2, profiles: ['Work', 'Personal'], tasks: [] };
+      return parsed && typeof parsed === 'object' ? parsed : defaultData();
     } catch {
-      return { version: 2, profiles: ['Work', 'Personal'], tasks: [] };
+      return defaultData();
     }
   }
 
   function normalizeData() {
-    if (!Array.isArray(state.data.profiles) || !state.data.profiles.length) state.data.profiles = ['Work', 'Personal'];
+    if (!Array.isArray(state.data.profiles) || !state.data.profiles.length) state.data.profiles = defaultData().profiles;
     if (!Array.isArray(state.data.tasks)) state.data.tasks = [];
 
-    state.data.version = 2;
-    state.data.profiles = [...new Set(state.data.profiles.map(p => String(p).trim()).filter(Boolean))];
+    state.data.version = 3;
+    const seen = new Set();
+    state.data.profiles = state.data.profiles.map((profile, index) => {
+      const normalized = typeof profile === 'string'
+        ? { name: profile.trim(), icon: index === 0 ? '💼' : index === 1 ? '🏠' : '👤' }
+        : { name: String(profile?.name || '').trim(), icon: PROFILE_ICONS.includes(profile?.icon) ? profile.icon : '👤' };
+      if (!normalized.name || seen.has(normalized.name.toLowerCase())) return null;
+      seen.add(normalized.name.toLowerCase());
+      return normalized;
+    }).filter(Boolean);
+    if (!state.data.profiles.length) state.data.profiles = defaultData().profiles;
 
     const statusCounters = {};
     state.data.tasks = state.data.tasks.map(task => {
-      const profile = task.profile || state.data.profiles[0];
+      const profile = task.profile || state.data.profiles[0].name;
       const status = STATUSES.includes(task.status) ? task.status : 'Next Up';
       const counterKey = `${profile}::${status}`;
       const fallbackOrder = statusCounters[counterKey] || 0;
@@ -112,7 +134,7 @@
 
   function getInitialProfile() {
     const saved = localStorage.getItem(PROFILE_KEY);
-    return state.data.profiles.includes(saved) ? saved : state.data.profiles[0];
+    return state.data.profiles.some(profile => profile.name === saved) ? saved : state.data.profiles[0].name;
   }
 
   function saveData() {
@@ -125,13 +147,18 @@
 
   function populateStaticControls() {
     els.status.innerHTML = STATUSES.map(status => `<option value="${escapeAttr(status)}">${escapeHtml(status)}</option>`).join('');
+    els.newProfileIcon.innerHTML = PROFILE_ICONS.map(icon => `<option value="${escapeAttr(icon)}">${escapeHtml(icon)}</option>`).join('');
+    els.newProfileIcon.value = '👤';
     populateProfileControls();
   }
 
   function populateProfileControls() {
-    const options = state.data.profiles.map(profile => `<option value="${escapeAttr(profile)}">${escapeHtml(profile)}</option>`).join('');
+    const options = state.data.profiles.map(profile => `<option value="${escapeAttr(profile.name)}" title="${escapeAttr(profile.name)}">${escapeHtml(profile.icon)}</option>`).join('');
     els.profileSelect.innerHTML = options;
     els.profileSelect.value = state.currentProfile;
+    const current = state.data.profiles.find(profile => profile.name === state.currentProfile);
+    els.profileSelect.setAttribute('aria-label', current ? `Profile: ${current.name}` : 'Current profile');
+    els.profileSelect.title = current?.name || 'Profile';
   }
 
   function bindEvents() {
@@ -166,13 +193,14 @@
       event.preventDefault();
       const name = els.newProfileName.value.trim();
       if (!name) return;
-      if (state.data.profiles.some(p => p.toLowerCase() === name.toLowerCase())) {
+      if (state.data.profiles.some(profile => profile.name.toLowerCase() === name.toLowerCase())) {
         alert('That profile already exists.');
         return;
       }
-      state.data.profiles.push(name);
+      state.data.profiles.push({ name, icon: els.newProfileIcon.value || '👤' });
       saveData();
       els.newProfileName.value = '';
+      els.newProfileIcon.value = '👤';
       populateProfileControls();
       renderProfileManager();
     });
@@ -257,7 +285,7 @@
           <span aria-hidden="true">⋮⋮</span>
         </button>
         <div class="status-strip" aria-hidden="true"></div>
-        <div class="task-card-body" data-open-task="true">
+        <div class="task-card-body ${!task.tags.length && !task.notes ? 'compact' : ''}" data-open-task="true">
           <h3 class="task-title" title="${escapeAttr(task.description)}">${escapeHtml(task.description)}</h3>
           ${task.tags.length ? `<div class="tags">${task.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
           ${task.notes ? `<div class="task-notes" title="${escapeAttr(task.notes)}">${escapeHtml(task.notes)}</div>` : ''}
@@ -488,7 +516,7 @@
       if (!confirm('Reset all local task data? Export a backup first if you may want it later.')) return;
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(PROFILE_KEY);
-      state.data = { version: 2, profiles: ['Work', 'Personal'], tasks: [] };
+      state.data = defaultData();
       state.currentProfile = 'Work';
       saveData();
       populateProfileControls();
@@ -516,7 +544,10 @@
     els.completeTaskBtn.hidden = isNew;
     els.advancedFields.open = false;
     els.taskDialog.showModal();
-    setTimeout(() => els.description.focus(), 20);
+    setTimeout(() => {
+      if (isNew) els.description.focus();
+      else els.taskDialogTitle.focus();
+    }, 20);
   }
 
   function saveTaskFromForm(event) {
@@ -629,20 +660,34 @@
 
   function renderProfileManager() {
     els.profileList.innerHTML = state.data.profiles.map(profile => {
-      const count = state.data.tasks.filter(t => t.profile === profile).length;
+      const count = state.data.tasks.filter(task => task.profile === profile.name).length;
       const canDelete = state.data.profiles.length > 1 && count === 0;
+      const iconOptions = PROFILE_ICONS.map(icon => `<option value="${escapeAttr(icon)}" ${icon === profile.icon ? 'selected' : ''}>${escapeHtml(icon)}</option>`).join('');
       return `
         <div class="profile-row">
-          <div><strong>${escapeHtml(profile)}</strong><div class="muted small">${count} task${count === 1 ? '' : 's'}</div></div>
-          <button class="secondary outline" data-delete-profile="${escapeAttr(profile)}" ${canDelete ? '' : 'disabled'}>Remove</button>
+          <div class="profile-row-main">
+            <select class="profile-icon-picker" data-profile-icon="${escapeAttr(profile.name)}" aria-label="Icon for ${escapeAttr(profile.name)}">${iconOptions}</select>
+            <div><strong>${escapeHtml(profile.name)}</strong><div class="muted small">${count} task${count === 1 ? '' : 's'}</div></div>
+          </div>
+          <button class="secondary outline" data-delete-profile="${escapeAttr(profile.name)}" ${canDelete ? '' : 'disabled'}>Remove</button>
         </div>`;
     }).join('');
 
+    els.profileList.querySelectorAll('[data-profile-icon]').forEach(select => {
+      select.addEventListener('change', () => {
+        const profile = state.data.profiles.find(item => item.name === select.dataset.profileIcon);
+        if (!profile) return;
+        profile.icon = select.value;
+        saveData();
+        populateProfileControls();
+      });
+    });
+
     els.profileList.querySelectorAll('[data-delete-profile]').forEach(button => {
       button.addEventListener('click', () => {
-        const profile = button.dataset.deleteProfile;
-        state.data.profiles = state.data.profiles.filter(p => p !== profile);
-        if (state.currentProfile === profile) state.currentProfile = state.data.profiles[0];
+        const profileName = button.dataset.deleteProfile;
+        state.data.profiles = state.data.profiles.filter(profile => profile.name !== profileName);
+        if (state.currentProfile === profileName) state.currentProfile = state.data.profiles[0].name;
         saveProfileSelection();
         saveData();
         populateProfileControls();
@@ -676,7 +721,7 @@
 
       state.data = { version: parsed.version || 1, profiles: parsed.profiles, tasks: parsed.tasks };
       normalizeData();
-      state.currentProfile = state.data.profiles.includes(state.currentProfile) ? state.currentProfile : state.data.profiles[0];
+      state.currentProfile = state.data.profiles.some(profile => profile.name === state.currentProfile) ? state.currentProfile : state.data.profiles[0].name;
       saveProfileSelection();
       populateProfileControls();
       render();

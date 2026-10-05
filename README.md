@@ -88,7 +88,7 @@ Then open `http://localhost:8000`.
 
 The empty `.nojekyll` file tells GitHub Pages to serve the repository as a plain static site without Jekyll processing.
 
-## v1.3.1
+## v1.4.0
 
 - Compact `+` new-task button on all screen sizes.
 - Removed added-date metadata from Active task cards.
@@ -99,3 +99,11 @@ The empty `.nojekyll` file tells GitHub Pages to serve the repository as a plain
 - Empty active statuses stay hidden until a drag begins, when they appear as drop targets.
 - Improved drag placeholder/floating-card feedback.
 - Refined navigation icon and desktop header sizing.
+
+
+## v1.4.0
+- Profiles now include an icon; the header selector shows only the icon.
+- Profile icons can be changed from Data & Profiles.
+- Description-only task cards center their text vertically.
+- Mobile task descriptions are slightly larger.
+- Existing tasks no longer auto-focus the description when opened; new tasks still do.

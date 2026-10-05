@@ -633,3 +633,77 @@ body { margin: 0; background: #0d1117; }
     min-height: 52px;
   }
 }
+
+
+/* v1.4.0 profile icons, card centering, and focus refinements */
+.profile-picker {
+  width: 46px;
+  min-width: 46px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+}
+.profile-picker select {
+  width: 46px !important;
+  min-width: 46px !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: center;
+  text-align-last: center;
+  font-size: 1.15rem;
+  line-height: 1;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: none !important;
+  cursor: pointer;
+}
+.task-card-body.compact {
+  display: flex;
+  align-items: center;
+  min-height: 34px;
+}
+.task-card-body.compact .task-title { margin: 0; }
+.profile-row-main {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  min-width: 0;
+}
+.profile-icon-picker,
+#newProfileIcon {
+  width: 52px;
+  min-width: 52px;
+  margin: 0;
+  text-align: center;
+  text-align-last: center;
+  font-size: 1.05rem;
+}
+.profile-add-form {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  gap: .5rem;
+  align-items: start;
+}
+#taskDialogTitle:focus { outline: none; }
+
+@media (max-width: 760px) {
+  .profile-picker { width: 38px; min-width: 38px; height: 38px; }
+  .profile-picker select {
+    width: 38px !important;
+    min-width: 38px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    font-size: 1.05rem;
+  }
+  .task-title { font-size: 1.02rem; }
+  .profile-add-form { grid-template-columns: 52px minmax(0, 1fr); }
+  .profile-add-form button { grid-column: 1 / -1; }
+}
+
+@media (min-width: 761px) {
+  .header-inner {
+    grid-template-columns: auto auto 46px 42px;
+  }
+}
