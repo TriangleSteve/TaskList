@@ -1,5 +1,5 @@
 # Local Task Tracker
-
+ 
 A lightweight, local-first task tracker designed for GitHub Pages. There is no backend, no build process, and no account system. Your data stays in the browser's `localStorage` until you export it.
 
 ## Features
