@@ -37,7 +37,6 @@
     closeTaskDialog: document.querySelector('#closeTaskDialog'),
     taskForm: document.querySelector('#taskForm'),
     taskDialogTitle: document.querySelector('#taskDialogTitle'),
-    taskMeta: document.querySelector('#taskMeta'),
     taskId: document.querySelector('#taskId'),
     description: document.querySelector('#description'),
     status: document.querySelector('#status'),
@@ -233,16 +232,16 @@
 
   function renderActiveView() {
     const groups = ACTIVE_STATUSES
-      .map(status => ({ status, tasks: sortedStatusTasks(status) }))
-      .filter(group => group.tasks.length);
+      .map(status => ({ status, tasks: sortedStatusTasks(status) }));
 
-    if (!groups.length) {
+    const hasTasks = groups.some(group => group.tasks.length);
+    if (!hasTasks) {
       els.activeView.innerHTML = emptyStateHtml('No active tasks in this profile.');
       return;
     }
 
     els.activeView.innerHTML = `<div class="active-groups">${groups.map(group => `
-      <section class="task-group" data-status="${escapeAttr(group.status)}">
+      <section class="task-group ${group.tasks.length ? '' : 'is-empty'}" data-status="${escapeAttr(group.status)}">
         <div class="task-group-header">
           <h2>${escapeHtml(group.status)}</h2>
           <span class="count-badge">${group.tasks.length}</span>
@@ -257,14 +256,14 @@
   }
 
   function taskCardHtml(task) {
-    const added = `Added ${formatDate(task.dateAdded)}`;
     return `
       <article class="task-card status-${slugify(task.status)}" data-task-id="${escapeAttr(task.id)}" tabindex="0">
-        <button class="drag-handle" type="button" aria-label="Reorder ${escapeAttr(task.description)}" title="Drag to reorder">☰</button>
+        <button class="drag-handle" type="button" aria-label="Move ${escapeAttr(task.description)}" title="Drag to reorder or change status">
+          <span aria-hidden="true">⋮⋮</span>
+        </button>
         <div class="status-strip" aria-hidden="true"></div>
         <div class="task-card-body" data-open-task="true">
           <h3 class="task-title">${escapeHtml(task.description)}</h3>
-          <div class="task-meta"><span>${escapeHtml(added)}</span></div>
           ${task.tags.length ? `<div class="tags">${task.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
         </div>
         <button class="task-open" type="button" data-open-task="true" aria-label="Open task">›</button>
@@ -274,16 +273,30 @@
   function initSortables() {
     if (typeof Sortable === 'undefined') return;
 
+    const activeGroups = els.activeView.querySelector('.active-groups');
+
     els.activeView.querySelectorAll('[data-sortable-status]').forEach(list => {
       const sortable = new Sortable(list, {
-        animation: 150,
+        group: 'active-task-statuses',
+        animation: 180,
         handle: '.drag-handle',
         draggable: '.task-card',
         ghostClass: 'drag-ghost',
         chosenClass: 'drag-chosen',
+        dragClass: 'drag-active',
         forceFallback: true,
-        fallbackTolerance: 3,
-        onEnd: () => persistStatusOrder(list.dataset.sortableStatus, list)
+        fallbackClass: 'drag-fallback',
+        fallbackOnBody: true,
+        fallbackTolerance: 2,
+        swapThreshold: 0.7,
+        invertSwap: true,
+        invertedSwapThreshold: 0.75,
+        emptyInsertThreshold: 28,
+        onStart: () => activeGroups?.classList.add('is-dragging'),
+        onEnd: event => {
+          activeGroups?.classList.remove('is-dragging');
+          persistActiveBoard(event);
+        }
       });
       state.sortables.push(sortable);
     });
@@ -294,13 +307,30 @@
     state.sortables = [];
   }
 
-  function persistStatusOrder(status, list) {
-    const ids = [...list.querySelectorAll('.task-card')].map(card => card.dataset.taskId);
-    ids.forEach((id, index) => {
-      const task = state.data.tasks.find(item => item.id === id);
-      if (task && task.profile === state.currentProfile && task.status === status) task.order = index;
+  function persistActiveBoard(event) {
+    const movedId = event.item?.dataset.taskId;
+    const destinationStatus = event.to?.dataset.sortableStatus;
+    const movedTask = state.data.tasks.find(task => task.id === movedId);
+
+    if (movedTask && ACTIVE_STATUSES.includes(destinationStatus)) {
+      movedTask.status = destinationStatus;
+      movedTask.updatedAt = new Date().toISOString();
+    }
+
+    els.activeView.querySelectorAll('[data-sortable-status]').forEach(list => {
+      const status = list.dataset.sortableStatus;
+      [...list.querySelectorAll('.task-card')].forEach((card, index) => {
+        const task = state.data.tasks.find(item => item.id === card.dataset.taskId);
+        if (task && task.profile === state.currentProfile) {
+          task.status = status;
+          task.order = index;
+        }
+      });
     });
+
     saveData();
+    destroySortables();
+    renderActiveView();
   }
 
   function renderSummaryView() {
@@ -479,7 +509,6 @@
     };
 
     els.taskDialogTitle.textContent = isNew ? 'New Task' : 'Task Details';
-    els.taskMeta.textContent = isNew ? state.currentProfile : `ID ${data.id}`;
     els.taskId.value = data.id;
     els.description.value = data.description;
     els.status.value = data.status;

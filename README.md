@@ -87,3 +87,15 @@ Then open `http://localhost:8000`.
 5. Save.
 
 The empty `.nojekyll` file tells GitHub Pages to serve the repository as a plain static site without Jekyll processing.
+
+## v1.2.0
+
+- Compact `+` new-task button on all screen sizes.
+- Removed added-date metadata from Active task cards.
+- Moved Status and Tags into Advanced fields; new tasks default to Next Up.
+- Task ID is no longer shown in the task editor.
+- Save and Discard actions moved to the top of the editor.
+- Active tasks can be dragged within a status or between active statuses.
+- Empty active statuses stay hidden until a drag begins, when they appear as drop targets.
+- Improved drag placeholder/floating-card feedback.
+- Refined navigation icon and desktop header sizing.

@@ -60,7 +60,6 @@ body { margin: 0; background: #0d1117; }
 .new-task-button { margin: 0; }
 .profile-picker select { height: 42px; padding-block: .45rem; }
 .new-task-button { height: 42px; padding: .55rem .9rem; white-space: nowrap; }
-.mobile-new-label { display: none; }
 
 .icon-button {
   width: 42px;
@@ -371,8 +370,6 @@ body { margin: 0; background: #0d1117; }
   .icon-button { width: 38px; height: 38px; }
   .profile-picker select { height: 38px; padding: .35rem .5rem; font-size: .88rem; }
   .new-task-button { width: 40px; height: 38px; padding: 0; font-size: 1.25rem; }
-  .desktop-new-label { display: none; }
-  .mobile-new-label { display: inline; }
   .app-main { padding: .75rem .7rem 2rem; }
   .summary-grid,
   .data-grid,
@@ -389,4 +386,106 @@ body { margin: 0; background: #0d1117; }
   dialog article { width: 100%; max-width: 100%; }
   .dialog-actions { flex-wrap: wrap; }
   .dialog-actions .spacer { min-width: 20px; }
+}
+
+/* v1.2 interaction refinements */
+.menu-button svg {
+  width: 21px;
+  height: 21px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.menu-button span { display: none; }
+
+.new-task-button {
+  width: 42px;
+  min-width: 42px;
+  padding: 0;
+  font-size: 1.45rem;
+  line-height: 1;
+  display: inline-grid;
+  place-items: center;
+}
+
+.task-meta { display: none; }
+
+.task-group.is-empty { display: none; }
+.active-groups.is-dragging .task-group.is-empty {
+  display: block;
+  opacity: .82;
+}
+.active-groups.is-dragging .task-group.is-empty .task-list {
+  min-height: 76px;
+  border: 1px dashed var(--pico-muted-border-color);
+  border-radius: var(--pico-border-radius);
+  background: rgba(255,255,255,.018);
+}
+.active-groups.is-dragging .task-list {
+  min-height: 58px;
+}
+
+.drag-handle {
+  font-size: 1.12rem;
+  letter-spacing: -3px;
+  font-weight: 700;
+}
+.drag-ghost {
+  opacity: 1 !important;
+  background: transparent !important;
+  border: 2px dashed var(--pico-primary-border) !important;
+  box-shadow: none !important;
+}
+.drag-ghost > * { visibility: hidden; }
+.drag-fallback {
+  opacity: .96 !important;
+  transform: rotate(.5deg) scale(1.01) !important;
+  box-shadow: 0 14px 34px rgba(0,0,0,.38) !important;
+  pointer-events: none !important;
+}
+.drag-chosen { border-color: var(--pico-primary-border); }
+.drag-active { cursor: grabbing; }
+
+.task-dialog-header {
+  align-items: center;
+  margin-bottom: .75rem;
+}
+.task-dialog-header h2 { margin: 0; }
+.dialog-top-actions {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.dialog-top-actions button {
+  width: auto;
+  min-width: 82px;
+  margin: 0;
+  padding: .55rem .78rem;
+}
+.advanced-grid {
+  display: grid;
+  gap: .7rem;
+}
+
+/* Avoid Pico control line boxes getting clipped inside the sticky header. */
+.header-inner {
+  padding-top: .55rem;
+  padding-bottom: .55rem;
+  min-height: 66px;
+  overflow: visible;
+}
+.profile-picker select,
+.new-task-button,
+.icon-button {
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+.profile-picker select { min-height: 42px; }
+
+@media (max-width: 760px) {
+  .new-task-button { width: 38px; min-width: 38px; height: 38px; }
+  .dialog-top-actions { gap: .4rem; }
+  .dialog-top-actions button { min-width: 74px; padding: .5rem .62rem; font-size: .88rem; }
+  .task-dialog-header { gap: .55rem; }
 }

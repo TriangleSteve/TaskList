@@ -7,13 +7,13 @@
   <title>Tasks</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
-  <link rel="stylesheet" href="styles.css?v=1.1.0" />
+  <link rel="stylesheet" href="styles.css?v=1.2.0" />
 </head>
 <body>
   <header class="app-header">
     <div class="header-inner">
       <button id="menuBtn" class="icon-button menu-button" aria-label="Open navigation" aria-expanded="false" aria-controls="appNav">
-        <span></span><span></span><span></span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
       </button>
 
       <h1>Tasks</h1>
@@ -23,7 +23,7 @@
         <select id="profileSelect" aria-label="Current profile"></select>
       </label>
 
-      <button id="newTaskBtn" class="contrast new-task-button"><span class="desktop-new-label">+ New Task</span><span class="mobile-new-label">+</span></button>
+      <button id="newTaskBtn" class="contrast new-task-button" aria-label="New task" title="New task">+</button>
     </div>
   </header>
 
@@ -50,12 +50,12 @@
 
   <dialog id="taskDialog">
     <article>
-      <header class="dialog-header">
-        <div>
-          <h2 id="taskDialogTitle">Task</h2>
-          <p id="taskMeta" class="muted small"></p>
+      <header class="dialog-header task-dialog-header">
+        <h2 id="taskDialogTitle">Task</h2>
+        <div class="dialog-top-actions">
+          <button type="button" id="closeTaskDialog" class="secondary outline">Discard</button>
+          <button type="submit" form="taskForm" id="topSaveTaskBtn">Save</button>
         </div>
-        <button aria-label="Close" rel="prev" id="closeTaskDialog"></button>
       </header>
 
       <form id="taskForm">
@@ -67,31 +67,31 @@
         </label>
 
         <label>
-          Status
-          <select id="status" required></select>
-        </label>
-
-        <label>
-          Tags <span class="muted small">(comma separated)</span>
-          <input id="tags" type="text" placeholder="dashboard, follow-up, admin" />
-        </label>
-
-        <label>
           Notes
           <textarea id="notes" rows="7" placeholder="Progress, decisions, links, completion notes..."></textarea>
         </label>
 
         <details class="advanced-fields">
           <summary>Advanced fields</summary>
-          <div class="form-grid two advanced-grid">
+          <div class="advanced-grid">
             <label>
-              Date added
-              <input id="dateAdded" type="datetime-local" />
+              Status
+              <select id="status" required></select>
             </label>
             <label>
-              Date completed
-              <input id="dateCompleted" type="datetime-local" />
+              Tags <span class="muted small">(comma separated)</span>
+              <input id="tags" type="text" placeholder="dashboard, follow-up, admin" />
             </label>
+            <div class="form-grid two">
+              <label>
+                Date added
+                <input id="dateAdded" type="datetime-local" />
+              </label>
+              <label>
+                Date completed
+                <input id="dateCompleted" type="datetime-local" />
+              </label>
+            </div>
           </div>
         </details>
 
@@ -99,7 +99,6 @@
           <button type="button" id="duplicateTaskBtn" class="secondary">Duplicate</button>
           <span class="spacer"></span>
           <button type="button" id="deleteTaskBtn" class="outline secondary">Delete</button>
-          <button type="submit">Save</button>
         </div>
       </form>
     </article>
@@ -122,6 +121,6 @@
   <input id="importFile" type="file" accept="application/json,.json" hidden />
 
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
-  <script src="app.js?v=1.1.0"></script>
+  <script src="app.js?v=1.2.0"></script>
 </body>
 </html>
