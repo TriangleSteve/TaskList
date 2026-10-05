@@ -55,11 +55,32 @@ body { margin: 0; background: #0d1117; }
   line-height: 1;
 }
 
-.profile-picker { margin: 0; min-width: 0; }
+.profile-picker {
+  margin: 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
 .profile-picker select,
 .new-task-button { margin: 0; }
-.profile-picker select { height: 42px; padding-block: .45rem; }
-.new-task-button { height: 42px; padding: .55rem .9rem; white-space: nowrap; }
+.profile-picker select {
+  height: 42px;
+  min-height: 42px;
+  padding-block: .45rem;
+  align-self: center;
+}
+.new-task-button {
+  width: 42px;
+  height: 42px;
+  min-height: 42px;
+  padding: 0;
+  display: inline-grid;
+  place-items: center;
+  align-self: center;
+  font-size: 1.35rem;
+  line-height: 1;
+  white-space: nowrap;
+}
 
 .icon-button {
   width: 42px;
@@ -210,6 +231,10 @@ body { margin: 0; background: #0d1117; }
   margin: 0 0 .25rem;
   font-size: .98rem;
   line-height: 1.35;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 .task-meta {
   display: flex;
@@ -226,6 +251,17 @@ body { margin: 0; background: #0d1117; }
   border-radius: 999px;
   font-size: .7rem;
   color: var(--pico-muted-color);
+}
+.task-notes {
+  margin-top: .42rem;
+  color: var(--pico-muted-color);
+  font-size: .79rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }
 .task-open {
   align-self: center;
@@ -328,7 +364,35 @@ body { margin: 0; background: #0d1117; }
 }
 .profile-row button { width: auto; margin: 0; }
 
-.dialog-header { display: flex; justify-content: space-between; align-items: start; gap: 1rem; }
+.dialog-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.task-dialog-header h2 { margin: 0; }
+.dialog-top-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: .45rem;
+}
+.task-action {
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+  min-height: 46px;
+  margin: 0;
+  padding: 0;
+  display: inline-grid;
+  place-items: center;
+}
+.task-action svg,
+.icon-button svg {
+  width: 21px;
+  height: 21px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+#taskForm > label:first-of-type input { margin-bottom: .75rem; }
 .form-grid.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
 .advanced-fields {
   margin-top: .25rem;
@@ -337,9 +401,6 @@ body { margin: 0; background: #0d1117; }
 }
 .advanced-fields summary { color: var(--pico-muted-color); font-size: .86rem; }
 .advanced-grid { margin-top: .75rem; }
-.dialog-actions { display: flex; gap: .5rem; align-items: center; margin-top: .7rem; }
-.dialog-actions .spacer { flex: 1; }
-.dialog-actions button { width: auto; margin-bottom: 0; }
 .empty-state {
   text-align: center;
   padding: 2.4rem 1rem;
@@ -352,6 +413,13 @@ body { margin: 0; background: #0d1117; }
   .app-main { padding-top: 1.25rem; }
   .active-groups { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 1.35rem 1.6rem; }
   .task-card { padding: .78rem .85rem; }
+  .task-title {
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .task-notes { -webkit-line-clamp: 2; }
   .summary-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
@@ -488,4 +556,17 @@ body { margin: 0; background: #0d1117; }
   .dialog-top-actions { gap: .4rem; }
   .dialog-top-actions button { min-width: 74px; padding: .5rem .62rem; font-size: .88rem; }
   .task-dialog-header { gap: .55rem; }
+}
+
+@media (max-width: 640px) {
+  .header-inner {
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    gap: .5rem;
+  }
+  .header-inner h1 { font-size: 1.15rem; }
+  .profile-picker select { width: 100%; }
+  .task-dialog-header { gap: .5rem; }
+  .task-dialog-header h2 { font-size: 1.15rem; }
+  .dialog-top-actions { gap: .3rem; }
+  .task-action { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
 }

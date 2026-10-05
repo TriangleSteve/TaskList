@@ -7,7 +7,7 @@
   <title>Tasks</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
-  <link rel="stylesheet" href="styles.css?v=1.2.0" />
+  <link rel="stylesheet" href="styles.css?v=1.3.0" />
 </head>
 <body>
   <header class="app-header">
@@ -51,10 +51,20 @@
   <dialog id="taskDialog">
     <article>
       <header class="dialog-header task-dialog-header">
-        <h2 id="taskDialogTitle">Task</h2>
-        <div class="dialog-top-actions">
-          <button type="button" id="closeTaskDialog" class="secondary outline">Discard</button>
-          <button type="submit" form="taskForm" id="topSaveTaskBtn">Save</button>
+        <h2 id="taskDialogTitle">Details</h2>
+        <div class="dialog-top-actions" aria-label="Task actions">
+          <button type="button" id="duplicateTaskBtn" class="task-action secondary outline" aria-label="Duplicate task" title="Duplicate">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="10" height="10" rx="2"/><rect x="5" y="5" width="10" height="10" rx="2"/></svg>
+          </button>
+          <button type="button" id="deleteTaskBtn" class="task-action secondary outline" aria-label="Delete task" title="Delete">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M8 10v7M12 10v7M16 10v7M6 7l1 13h10l1-13"/></svg>
+          </button>
+          <button type="button" id="closeTaskDialog" class="task-action secondary outline" aria-label="Discard changes" title="Discard">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+          <button type="submit" form="taskForm" id="topSaveTaskBtn" class="task-action" aria-label="Save task" title="Save">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg>
+          </button>
         </div>
       </header>
 
@@ -63,7 +73,7 @@
 
         <label>
           Description
-          <textarea id="description" rows="3" required placeholder="What needs to be done?"></textarea>
+          <input id="description" type="text" maxlength="120" required placeholder="What needs to be done?" />
         </label>
 
         <label>
@@ -72,7 +82,7 @@
         </label>
 
         <details class="advanced-fields">
-          <summary>Advanced fields</summary>
+          <summary>Advanced</summary>
           <div class="advanced-grid">
             <label>
               Status
@@ -95,11 +105,6 @@
           </div>
         </details>
 
-        <div class="dialog-actions">
-          <button type="button" id="duplicateTaskBtn" class="secondary">Duplicate</button>
-          <span class="spacer"></span>
-          <button type="button" id="deleteTaskBtn" class="outline secondary">Delete</button>
-        </div>
       </form>
     </article>
   </dialog>
@@ -121,6 +126,6 @@
   <input id="importFile" type="file" accept="application/json,.json" hidden />
 
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
-  <script src="app.js?v=1.2.0"></script>
+  <script src="app.js?v=1.3.0"></script>
 </body>
 </html>

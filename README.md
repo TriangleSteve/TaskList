@@ -88,7 +88,7 @@ Then open `http://localhost:8000`.
 
 The empty `.nojekyll` file tells GitHub Pages to serve the repository as a plain static site without Jekyll processing.
 
-## v1.2.0
+## v1.3.0
 
 - Compact `+` new-task button on all screen sizes.
 - Removed added-date metadata from Active task cards.

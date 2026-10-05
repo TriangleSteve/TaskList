@@ -129,7 +129,7 @@
 
   function populateProfileControls() {
     const options = state.data.profiles.map(profile => `<option value="${escapeAttr(profile)}">${escapeHtml(profile)}</option>`).join('');
-    els.profileSelect.innerHTML = `${options}<option value="__manage__">Manage profiles…</option>`;
+    els.profileSelect.innerHTML = options;
     els.profileSelect.value = state.currentProfile;
   }
 
@@ -151,12 +151,6 @@
     });
 
     els.profileSelect.addEventListener('change', () => {
-      if (els.profileSelect.value === '__manage__') {
-        els.profileSelect.value = state.currentProfile;
-        renderProfileManager();
-        els.profileDialog.showModal();
-        return;
-      }
       state.currentProfile = els.profileSelect.value;
       saveProfileSelection();
       render();
@@ -263,8 +257,9 @@
         </button>
         <div class="status-strip" aria-hidden="true"></div>
         <div class="task-card-body" data-open-task="true">
-          <h3 class="task-title">${escapeHtml(task.description)}</h3>
+          <h3 class="task-title" title="${escapeAttr(task.description)}">${escapeHtml(task.description)}</h3>
           ${task.tags.length ? `<div class="tags">${task.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
+          ${task.notes ? `<div class="task-notes" title="${escapeAttr(task.notes)}">${escapeHtml(task.notes)}</div>` : ''}
         </div>
         <button class="task-open" type="button" data-open-task="true" aria-label="Open task">›</button>
       </article>`;
@@ -508,7 +503,7 @@
       tags: [], dateAdded: now, dateCompleted: null, notes: ''
     };
 
-    els.taskDialogTitle.textContent = isNew ? 'New Task' : 'Task Details';
+    els.taskDialogTitle.textContent = isNew ? 'New' : 'Details';
     els.taskId.value = data.id;
     els.description.value = data.description;
     els.status.value = data.status;
