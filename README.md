@@ -1,4 +1,4 @@
-# Planner v2.2.2
+# Planner v2.2.3
 
 A local-first personal planner for GitHub Pages. No build step and no backend are required.
 
@@ -26,10 +26,10 @@ Planner automatically saves to browser localStorage. Export JSON periodically fo
 
 Upload the contents of this folder to the branch/folder configured in **Settings → Pages**. `.nojekyll` tells GitHub Pages to serve the files directly.
 
-Assets use `?v=2.2.2` cache-busting query strings so new releases are less likely to be hidden by stale browser caches.
+Assets use `?v=2.2.3` cache-busting query strings so new releases are less likely to be hidden by stale browser caches.
 
 
-## v2.2.2
+## v2.2.3
 
 - Planner task buckets can be collapsed/expanded from their headers.
 - Collapsed state is remembered locally per profile and bucket.
