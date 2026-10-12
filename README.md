@@ -1,4 +1,4 @@
-# Planner v2.2.0
+# Planner v2.2.1
 
 A local-first personal planner for GitHub Pages. No build step and no backend are required.
 
@@ -26,4 +26,12 @@ Planner automatically saves to browser localStorage. Export JSON periodically fo
 
 Upload the contents of this folder to the branch/folder configured in **Settings → Pages**. `.nojekyll` tells GitHub Pages to serve the files directly.
 
-Assets use `?v=2.2.0` cache-busting query strings so new releases are less likely to be hidden by stale browser caches.
+Assets use `?v=2.2.1` cache-busting query strings so new releases are less likely to be hidden by stale browser caches.
+
+
+## v2.2.1
+- Removed the global top header.
+- Moved profile selection into the sidebar footer beside backup controls.
+- New Task now sits beside the Tasks heading.
+- Schedule heading/new-event control uses the same non-sticky heading treatment.
+- Due recurring templates now spawn a Priority task instance and advance to their next occurrence.

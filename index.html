@@ -8,22 +8,12 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
-  <link rel="stylesheet" href="styles.css?v=2.2.0" />
+  <link rel="stylesheet" href="styles.css?v=2.2.1" />
 </head>
 <body>
-  <header class="app-header">
-    <div class="header-inner">
-      <button id="menuBtn" class="icon-button menu-button" aria-label="Open navigation" aria-expanded="false" aria-controls="appNav">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
-      </button>
-      <h1>Planner</h1>
-      <div class="profile-control">
-        <button id="profileButton" class="profile-button" type="button" aria-label="Change profile" aria-haspopup="true" aria-expanded="false"></button>
-        <div id="profileMenu" class="profile-menu hidden" role="menu"></div>
-      </div>
-      <button id="newTaskBtn" class="contrast new-task-button" aria-label="New task" title="New task">+</button>
-    </div>
-  </header>
+  <button id="menuBtn" class="icon-button menu-button mobile-menu-button" aria-label="Open navigation" aria-expanded="false" aria-controls="appNav">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+  </button>
 
   <div id="navBackdrop" class="nav-backdrop hidden" aria-hidden="true"></div>
   <aside id="appNav" class="app-nav" aria-label="Primary navigation">
@@ -33,7 +23,16 @@
       <button class="tab-button" data-view="summary"><span>Summary</span></button>
       <button class="tab-button" data-view="settings"><span>Data & Profiles</span></button>
     </nav>
-    <div id="sidebarBackup" class="sidebar-backup"></div>
+    <div class="sidebar-footer">
+      <div class="sidebar-profile">
+        <span class="sidebar-footer-label">Profile</span>
+        <div class="profile-control">
+          <button id="profileButton" class="profile-button" type="button" aria-label="Change profile" aria-haspopup="true" aria-expanded="false"></button>
+          <div id="profileMenu" class="profile-menu hidden" role="menu"></div>
+        </div>
+      </div>
+      <div id="sidebarBackup" class="sidebar-backup"></div>
+    </div>
   </aside>
 
   <main class="app-main">
@@ -116,6 +115,6 @@
 
   <input id="importFile" type="file" accept="application/json,.json" hidden />
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
-  <script src="app.js?v=2.2.0"></script>
+  <script src="app.js?v=2.2.1"></script>
 </body>
 </html>
