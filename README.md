@@ -1,109 +1,34 @@
-# Local Task Tracker
+# Task Tracker v2.0
 
-A lightweight, local-first task tracker designed for GitHub Pages. There is no backend, no build process, and no account system. Task data stays in the browser's `localStorage` until you export it.
+A local-first task and event tracker designed for GitHub Pages.
 
-## Version 1.1.0
+## What's new in v2.0
 
-- Compact header: **Tasks + profile + New Task**
-- Slide-out navigation to reclaim screen space
-- Profile remains a page-level context across every view
-- Empty active-status sections are hidden
-- Drag-handle ordering within Priority, Next Up, Waiting On, and Reocurring
-- Manual order is persisted in the task JSON
-- Category and subcategory fields removed in favor of tags
-- Task profile is implicit and no longer shown in the editor
-- Date added / date completed moved under an Advanced fields disclosure
-- Wider desktop layout with two-column status groups and two-column summary history
-- Versioned CSS and JavaScript URLs for cache busting on GitHub Pages
-
-## Views
-
-### Active
-Shows only non-empty active groups in this order:
-1. Priority
-2. Next Up
-3. Waiting On
-4. Reocurring
-
-Use the drag handle on the left of a task to reorder tasks within a group.
-
-### Summary
-Shows completed work for the last day, week, month, quarter, or year and provides a copyable text summary.
-
-### All Tasks
-Search and filter the current profile's full task history, including completed and deleted tasks.
-
-### Data & Profiles
-Manage profiles, export/import JSON backups, inspect the dataset, or reset local data.
-
-## Task fields
-
-- ID
-- Description
-- Status
-- Profile (stored on the task but implicit from the currently selected page profile)
-- Tags
-- Notes
-- Date added
-- Date completed
-- Manual order
+- Desktop-first layout with a persistent navigation sidebar.
+- Active tasks return to a single-column list.
+- A right-side Schedule rail shows Past Due, Today, the next six days, and Upcoming events.
+- Events are stored separately from tasks and can be Scheduled, Completed, or Cancelled.
+- Completed events appear alongside completed tasks on the Summary page.
+- Wider desktop task/event editors.
+- Lighter task typography and tighter desktop spacing.
+- Checked-checkbox favicon.
+- Existing v1.x tasks/profiles are migrated in-place; v2 adds an `events` collection.
 
 ## Storage
 
-The app uses these browser keys:
+v2.0 still uses browser `localStorage` as the live data store. Export/Import JSON remains available under Data & Profiles. The JSON structure now includes:
 
-- `local-task-tracker-v1`
-- `local-task-tracker-profile-v1`
-
-The storage key intentionally remains the same as the first release so existing browser data is migrated automatically. The internal dataset schema is now version 2.
-
-Clearing site data removes local tasks, so export JSON backups periodically if the data matters.
-
-## Cache busting
-
-Local assets use version query strings:
-
-```html
-<link rel="stylesheet" href="styles.css?v=1.1.0">
-<script src="app.js?v=1.1.0"></script>
+```json
+{
+  "version": 4,
+  "profiles": [],
+  "tasks": [],
+  "events": []
+}
 ```
 
-When publishing a new app version, bump both values (for example, `1.1.1`). This makes browsers request the new CSS and JavaScript rather than continuing to use cached copies.
+A later storage refactor can make a user-selected local JSON file the source of truth and autosave to it.
 
-## Run locally
+## GitHub Pages
 
-```bash
-python -m http.server 8000
-```
-
-Then open `http://localhost:8000`.
-
-## Deploy to GitHub Pages
-
-1. Copy the contents of this folder into the repository root.
-2. Commit and push.
-3. In **Settings → Pages**, select **Deploy from a branch**.
-4. Choose the main branch and `/ (root)`.
-5. Save.
-
-The empty `.nojekyll` file tells GitHub Pages to serve the repository as a plain static site without Jekyll processing.
-
-## v1.4.0
-
-- Compact `+` new-task button on all screen sizes.
-- Removed added-date metadata from Active task cards.
-- Moved Status and Tags into Advanced fields; new tasks default to Next Up.
-- Task ID is no longer shown in the task editor.
-- Save and Discard actions moved to the top of the editor.
-- Active tasks can be dragged within a status or between active statuses.
-- Empty active statuses stay hidden until a drag begins, when they appear as drop targets.
-- Improved drag placeholder/floating-card feedback.
-- Refined navigation icon and desktop header sizing.
-
-
-## v1.4.0
-- Profiles now include an icon; the header selector shows only the icon.
-- Profile icons can be changed from Data & Profiles.
-- Description-only task cards center their text vertically.
-- Mobile task descriptions are slightly larger.
-- Existing tasks no longer auto-focus the description when opened; new tasks still do.
+Upload the contents of this folder to the configured Pages branch/folder. No build step is required. `.nojekyll` tells GitHub Pages to serve the files directly.
