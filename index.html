@@ -8,7 +8,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
-  <link rel="stylesheet" href="styles.css?v=2.1.1" />
+  <link rel="stylesheet" href="styles.css?v=2.2.0" />
 </head>
 <body>
   <header class="app-header">
@@ -17,24 +17,23 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
       </button>
       <h1>Planner</h1>
-      <label class="profile-picker">
-        <span class="sr-only">Profile</span>
-        <select id="profileSelect" aria-label="Current profile"></select>
-      </label>
+      <div class="profile-control">
+        <button id="profileButton" class="profile-button" type="button" aria-label="Change profile" aria-haspopup="true" aria-expanded="false"></button>
+        <div id="profileMenu" class="profile-menu hidden" role="menu"></div>
+      </div>
       <button id="newTaskBtn" class="contrast new-task-button" aria-label="New task" title="New task">+</button>
     </div>
   </header>
 
   <div id="navBackdrop" class="nav-backdrop hidden" aria-hidden="true"></div>
   <aside id="appNav" class="app-nav" aria-label="Primary navigation">
-    <div class="nav-mobile-header">
-      <button id="closeNavBtn" class="icon-button close-nav" aria-label="Close navigation">×</button>
-    </div>
+    <div class="nav-mobile-header"><button id="closeNavBtn" class="icon-button close-nav" aria-label="Close navigation">×</button></div>
     <nav class="nav-links">
       <button class="tab-button active" data-view="active"><span>Planner</span></button>
       <button class="tab-button" data-view="summary"><span>Summary</span></button>
       <button class="tab-button" data-view="settings"><span>Data & Profiles</span></button>
     </nav>
+    <div id="sidebarBackup" class="sidebar-backup"></div>
   </aside>
 
   <main class="app-main">
@@ -54,7 +53,12 @@
           <summary>Advanced</summary>
           <div class="advanced-grid">
             <label>Status<select id="status" required></select></label>
+            <label class="focus-toggle"><input id="focusToday" type="checkbox" role="switch" /> Focus</label>
             <label>Tags <span class="muted small">(comma separated)</span><input id="tags" type="text" autocomplete="off" placeholder="follow-up, admin" /></label>
+            <div id="recurrenceFields" class="recurrence-fields hidden">
+              <label>Repeat<select id="recurrence"><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="monthly">Monthly</option></select></label>
+              <label>Next occurrence<input id="nextOccurrence" type="date" /></label>
+            </div>
             <div class="form-grid two">
               <label>Date added<input id="dateAdded" type="date" /></label>
               <label>Date completed<input id="dateCompleted" type="date" /></label>
@@ -81,10 +85,10 @@
           <label>Date<input id="eventDate" type="date" required /></label>
           <label>Time<input id="eventTime" type="time" /></label>
         </div>
-        <label>Notes<textarea id="eventNotes" rows="7" autocomplete="off" placeholder="Location, preparation, links, outcome..."></textarea></label>
         <details class="event-advanced-fields">
           <summary>Advanced</summary>
           <div class="advanced-grid">
+            <label>Notes<textarea id="eventNotes" rows="6" autocomplete="off" placeholder="Location, preparation, links, outcome..."></textarea></label>
             <label>Status<select id="eventStatus"><option>Scheduled</option><option>Completed</option><option>Cancelled</option></select></label>
             <label>Tags <span class="muted small">(comma separated)</span><input id="eventTags" type="text" autocomplete="off" placeholder="appointment, family" /></label>
           </div>
@@ -103,7 +107,7 @@
       <header class="dialog-header"><h2>Profiles</h2><button aria-label="Close" rel="prev" id="closeProfileDialog"></button></header>
       <div id="profileList"></div>
       <form id="addProfileForm" class="profile-add-form" autocomplete="off">
-        <select id="newProfileIcon" aria-label="Profile icon"></select>
+        <div id="newProfileIcons" class="profile-icon-picker" aria-label="Profile icon"></div>
         <input id="newProfileName" type="text" autocomplete="off" placeholder="New profile name" required />
         <button type="submit">Add</button>
       </form>
@@ -112,6 +116,6 @@
 
   <input id="importFile" type="file" accept="application/json,.json" hidden />
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
-  <script src="app.js?v=2.1.1"></script>
+  <script src="app.js?v=2.2.0"></script>
 </body>
 </html>
