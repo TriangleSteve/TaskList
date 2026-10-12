@@ -193,10 +193,10 @@
   function renderSummaryItem(x){
     if(x.type==='task'){
       const t=x.item;
-      return `<article class="summary-item" data-summary-task="${t.id}"><div class="summary-item-head"><span class="type-pill">Task</span><time>${formatDate(t.dateCompleted)}</time></div><h3>${escapeHtml(t.description)}</h3>${t.notes?`<div class="summary-notes">${escapeHtml(t.notes)}</div>`:''}</article>`;
+      return `<article class="summary-item" data-summary-task="${t.id}"><div class="summary-item-head"><span class="type-pill">Task</span><time>${formatDate(t.dateCompleted)}</time></div><h3>${escapeHtml(t.description)}</h3></article>`;
     }
     const e=x.item;
-    return `<article class="summary-item" data-summary-event="${e.id}"><div class="summary-item-head"><span class="type-pill event">Event</span><time>${formatDate(e.date)}</time></div><h3>${escapeHtml(e.title)}</h3>${e.time?`<div class="muted small">${formatTime(e.time)}</div>`:''}${e.notes?`<div class="summary-notes">${escapeHtml(e.notes)}</div>`:''}</article>`;
+    return `<article class="summary-item" data-summary-event="${e.id}"><div class="summary-item-head"><span class="type-pill event">Event</span><time>${formatDate(e.date)}</time></div><h3>${escapeHtml(e.title)}</h3>${e.time?`<div class="muted small">${formatTime(e.time)}</div>`:''}</article>`;
   }
 
   function renderSettings(){

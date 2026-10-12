@@ -8,7 +8,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
-  <link rel="stylesheet" href="styles.css?v=2.1.0" />
+  <link rel="stylesheet" href="styles.css?v=2.1.1" />
 </head>
 <body>
   <header class="app-header">
@@ -46,15 +46,15 @@
   <dialog id="taskDialog">
     <article>
       <header class="dialog-header"><h2 id="taskDialogTitle" tabindex="-1">Details</h2></header>
-      <form id="taskForm">
+      <form id="taskForm" autocomplete="off">
         <input id="taskId" type="hidden" />
-        <label>Description<input id="description" type="text" maxlength="120" required placeholder="What needs to be done?" /></label>
-        <label>Notes<textarea id="notes" rows="8" placeholder="Progress, decisions, links, completion notes..."></textarea></label>
+        <label>Description<input id="description" type="text" autocomplete="off" maxlength="120" required placeholder="What needs to be done?" /></label>
+        <label>Notes<textarea id="notes" rows="8" autocomplete="off" placeholder="Progress, decisions, links, completion notes..."></textarea></label>
         <details class="advanced-fields">
           <summary>Advanced</summary>
           <div class="advanced-grid">
             <label>Status<select id="status" required></select></label>
-            <label>Tags <span class="muted small">(comma separated)</span><input id="tags" type="text" placeholder="follow-up, admin" /></label>
+            <label>Tags <span class="muted small">(comma separated)</span><input id="tags" type="text" autocomplete="off" placeholder="follow-up, admin" /></label>
             <div class="form-grid two">
               <label>Date added<input id="dateAdded" type="date" /></label>
               <label>Date completed<input id="dateCompleted" type="date" /></label>
@@ -74,19 +74,19 @@
   <dialog id="eventDialog">
     <article>
       <header class="dialog-header"><h2 id="eventDialogTitle" tabindex="-1">Event</h2></header>
-      <form id="eventForm">
+      <form id="eventForm" autocomplete="off">
         <input id="eventId" type="hidden" />
-        <label>Title<input id="eventTitle" type="text" maxlength="120" required placeholder="What is happening?" /></label>
+        <label>Title<input id="eventTitle" type="text" autocomplete="off" maxlength="120" required placeholder="What is happening?" /></label>
         <div class="form-grid two">
           <label>Date<input id="eventDate" type="date" required /></label>
           <label>Time<input id="eventTime" type="time" /></label>
         </div>
-        <label>Notes<textarea id="eventNotes" rows="7" placeholder="Location, preparation, links, outcome..."></textarea></label>
+        <label>Notes<textarea id="eventNotes" rows="7" autocomplete="off" placeholder="Location, preparation, links, outcome..."></textarea></label>
         <details class="event-advanced-fields">
           <summary>Advanced</summary>
           <div class="advanced-grid">
             <label>Status<select id="eventStatus"><option>Scheduled</option><option>Completed</option><option>Cancelled</option></select></label>
-            <label>Tags <span class="muted small">(comma separated)</span><input id="eventTags" type="text" placeholder="appointment, family" /></label>
+            <label>Tags <span class="muted small">(comma separated)</span><input id="eventTags" type="text" autocomplete="off" placeholder="appointment, family" /></label>
           </div>
         </details>
         <div class="dialog-bottom-actions" aria-label="Event actions">
@@ -102,9 +102,9 @@
     <article>
       <header class="dialog-header"><h2>Profiles</h2><button aria-label="Close" rel="prev" id="closeProfileDialog"></button></header>
       <div id="profileList"></div>
-      <form id="addProfileForm" class="profile-add-form">
+      <form id="addProfileForm" class="profile-add-form" autocomplete="off">
         <select id="newProfileIcon" aria-label="Profile icon"></select>
-        <input id="newProfileName" type="text" placeholder="New profile name" required />
+        <input id="newProfileName" type="text" autocomplete="off" placeholder="New profile name" required />
         <button type="submit">Add</button>
       </form>
     </article>
@@ -112,6 +112,6 @@
 
   <input id="importFile" type="file" accept="application/json,.json" hidden />
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
-  <script src="app.js?v=2.1.0"></script>
+  <script src="app.js?v=2.1.1"></script>
 </body>
 </html>

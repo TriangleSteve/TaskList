@@ -1,8 +1,8 @@
-# Planner v2.1.0
+# Planner v2.1.1
 
 A local-first task and event planner designed for GitHub Pages. The app is static HTML/CSS/JavaScript with no backend and no build step.
 
-## What's new in v2.1
+## What's new in v2.1.1
 
 - Desktop-first layout with a persistent, slightly wider navigation sidebar.
 - Removed duplicate branding/profile information from the sidebar and removed the All Tasks page.
